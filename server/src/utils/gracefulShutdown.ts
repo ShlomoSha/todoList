@@ -1,5 +1,5 @@
-import { closeDb } from "../src/config/db.config"
-import { isProd } from "../src/config/env.config";
+import { closeDb } from "../config/db.config"
+import { isProd } from "../config/env.config";
 
 const SHUTDOWN_TIMEOUT = isProd ? 25000 : 5000;
 

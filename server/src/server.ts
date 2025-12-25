@@ -1,7 +1,7 @@
 import { app } from "./app"
 import { connectToDb } from "./config/db.config"
 import { DB_URL, PORT } from "./config/env.config"
-import { setServerInstance, setUpProcessHandlers } from "../utils/processHandlers"
+import { setServerInstance, setUpProcessHandlers } from "./utils/processHandlers"
 
 const startServer = async (): Promise<void> => {
     try {
