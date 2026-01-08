@@ -19,6 +19,7 @@ const startServer = async (): Promise<void> => {
     }
 }
 
-setUpProcessHandlers()
+// preparation to production
+// setUpProcessHandlers()
 
 startServer()
