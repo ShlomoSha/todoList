@@ -1,23 +1,14 @@
-export const register = async () => {
-    try {
-        
-    } catch (err) {
-        
-    }
-}
+import { Request, Response } from "express"
+import { asyncHandler } from "../utils/asyncHandler"
 
-export const login = async () => {
-    try {
-        
-    } catch (err) {
-        
-    }
-}
+export const register = asyncHandler(async (req: Request, res: Response) => {
+    
+})
 
-export const validateToken = async () => {
-    try {
-        
-    } catch (err) {
-        
-    }
-}
+export const login = asyncHandler(async (req: Request, res: Response) => {
+    
+})
+
+export const validateToken = asyncHandler(async (req: Request, res: Response) => {
+    
+})
