@@ -1,8 +1,8 @@
 import { AppError } from "./AppError";
 
-export class BedRequestError extends AppError {
-    constructor(message: string = 'Bed Requst', errors?: any[]) {
-        super(message, 400, errors)
+export class BadRequestError extends AppError {
+    constructor(message: string = 'Bad Requst', statusCode: number = 400, errors?: any[]) {
+        super(message, statusCode, errors)
     }
 }
 
