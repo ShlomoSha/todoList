@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
-import { ConflictError, UnauthorizedError } from "../errors/httpErrors";
+import { ConflictError, NotFoundError, UnauthorizedError } from "../errors/httpErrors";
 import { UserModel } from "../models/user/user.schema";
 import { LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import { JWT_SECRET } from "../config/env.config";
@@ -57,4 +57,14 @@ export const userLogin = async (credentials: LoginDTO) => {
             username: user.username
         }
     }
+}
+
+export const getUserById = async (userId: string) => {
+    const user = await UserModel.findById(userId)
+
+    if (!user) {
+        throw new NotFoundError('User not found')
+    }
+
+    return user
 }
