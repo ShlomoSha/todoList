@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { asyncHandler } from "../utils/asyncHandler"
-import { createNewUser, getUserById, userLogin } from "../services/auth.service"
+import { createNewUser, userLogin } from "../services/auth.service"
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
     const newUser = await createNewUser(req.body)
@@ -21,5 +21,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getCurrentUser = asyncHandler(async (req: Request, res: Response) => {
-    const user = await getUserById(req.body)
+    res.status(200).json({
+        success: true,
+        data: { user: req.user}
+    })
 })
