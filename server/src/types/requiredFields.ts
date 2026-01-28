@@ -1,3 +1,4 @@
 export type RequiredFields = 
     'username' | 
-    'password' 
+    'password' |
+    'title' 
