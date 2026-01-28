@@ -3,6 +3,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import authRouter from './routes/auth.router'
 import { errorHandler, notFoundHandler } from './middleware/errorHandler'
+import taskRouter from './routes/task.router'
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.get('/ping', (req, res) => {
     })
 })
 app.use('/auth', authRouter)
+app.use('/tasks', taskRouter)
 
 app.use(notFoundHandler)
 app.use(errorHandler)
