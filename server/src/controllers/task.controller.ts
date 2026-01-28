@@ -20,6 +20,15 @@ export const getTaskById = asyncHandler(async (req: Request, res: Response) => {
     })
 })
 
+export const getUserStats = asyncHandler(async (req: Request, res: Response) => {
+    const stast = await taskService.getUserTaskStats(req.user.id)
+
+    res.status(200).json({
+        success: true,
+        data: stast,
+    })
+})
+
 export const createTask = asyncHandler(async (req: Request, res: Response) => {
     const newTask = await taskService.createTask(req.body, req.user.id)
 
@@ -37,6 +46,15 @@ export const updateTask = asyncHandler(async (req: Request, res: Response) => {
         success: true,
         data: updatedTask,
         message: "Task updated successfully",
+    })
+})
+
+export const toggleTaskCompletion = asyncHandler(async (req: Request, res: Response) => {
+    const task = await taskService.toggleTaskCompletion(req.params.id)
+
+    res.status(200).json({
+        success: true,
+        data: task
     })
 })
 

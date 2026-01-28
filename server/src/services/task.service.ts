@@ -58,6 +58,19 @@ export const updateTask = async (taskId: string, updates: UpdateTaskDTO) => {
     return updatedTask
 }
 
+export const toggleTaskCompletion = async (taskId: string) => {
+    if (!Types.ObjectId.isValid(taskId)) {
+        throw new BadRequestError('Invalid task id format')
+    }
+
+    const task = await findTaskById(taskId)
+
+    task.isCompleted = !task.isCompleted
+    await task.save()
+
+    return task
+}
+
 export const deleteTask = async (taskId: string) => {
     if (!Types.ObjectId.isValid(taskId)) {
         throw new BadRequestError('Invalid task id format')
@@ -67,5 +80,32 @@ export const deleteTask = async (taskId: string) => {
 
     if (!deletedTask) {
         throw new NotFoundError()
+    }
+}
+
+export const getUserTaskStats = async (userId: string) => {
+    const stats = await TaskModel.aggregate([
+        { $match: { assignedTo: new Types.ObjectId(userId) } },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: 1 },
+                completed: {
+                    $sum: { $cond: ["$isCompleted", 1, 0] }
+                },
+                pending: {
+                    $sum: { $cond: ["$isCompleted", 0, 1] }
+                }
+            }
+        }
+    ])
+
+    const { total = 0, completed = 0, pending = 0 } = stats[0] || {}
+
+    return {
+        total,
+        completed,
+        pending,
+        completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
     }
 }
