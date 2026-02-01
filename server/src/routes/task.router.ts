@@ -7,11 +7,11 @@ const taskRouter = Router()
 taskRouter.use(protect)
 
 taskRouter.get('/', getAllTasks)
-taskRouter.get('/:id', getTaskById)
 taskRouter.get('/stats', getUserStats)
+taskRouter.get('/:id', getTaskById)
 taskRouter.post('/', createTask)
-taskRouter.patch('/:id', updateTask)
 taskRouter.patch('/toggle/:id', toggleTaskCompletion)
+taskRouter.patch('/:id', updateTask)
 taskRouter.delete('/:id', deleteTask)
 
 export default taskRouter
