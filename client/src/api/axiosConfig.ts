@@ -1,4 +1,5 @@
 import axios from "axios";
+import authService from "./authService";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -34,7 +35,7 @@ axiosInstance.interceptors.response.use(
         if (error.response) {
             switch (error.response.status) {
                 case 401:
-                    localStorage.removeItem('token')
+                    authService.logout()
                     window.location.href = '/login'
                     break;
                 case 403:
