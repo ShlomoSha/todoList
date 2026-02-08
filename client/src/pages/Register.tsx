@@ -1,14 +1,11 @@
 import AuthForm from "../components/AuthForm";
+import { ROUTES } from "../constants/constants";
 
 export default function Register() {
 
-  const createUser = async () => {
-    
-  }
-
   return (
     <>
-      <AuthForm mode="register" />
+      <AuthForm mode={`${ROUTES.REGISTER}`} />
     </>
   )
 }

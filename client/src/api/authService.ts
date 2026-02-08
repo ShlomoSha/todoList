@@ -1,15 +1,12 @@
+import { ROUTES, TOKEN } from "../constants/constants";
 import type { AuthDto } from "../types/auth.interface";
 import axiosInstance from "./axiosConfig";
 
-const authApi = axiosInstance.create({
-    baseURL: '/auth'
-})
-
 const authService = {
-    login: (credentials: AuthDto) => authApi.post('/login', credentials),
-    register: (userData: AuthDto) => authApi.post('/register', userData),
+    login: (credentials: AuthDto) => axiosInstance.post(`/${ROUTES.AUTH}/${ROUTES.LOGIN}`, credentials),
+    register: (userData: AuthDto) => axiosInstance.post(`/${ROUTES.AUTH}/${ROUTES.REGISTER}`, userData),
     logout: async () => {
-        localStorage.removeItem('token')
+        localStorage.removeItem(TOKEN)
     }
 }
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import authService from "./authService";
+import { ROUTES, TOKEN } from "../constants/constants";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL,
@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-            const token = localStorage.getItem('token')
+            const token = localStorage.getItem(TOKEN)
             
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error)
     },
     {
-        runWhen: (config) => !config.url?.includes('/register')
+        runWhen: (config) => !config.url?.includes(`/${ROUTES.REGISTER}`)
     }
 )
 
@@ -34,10 +34,6 @@ axiosInstance.interceptors.response.use(
     (error) => {
         if (error.response) {
             switch (error.response.status) {
-                case 401:
-                    authService.logout()
-                    window.location.href = '/login'
-                    break;
                 case 403:
                     console.error('Access forbidden');
                     break;

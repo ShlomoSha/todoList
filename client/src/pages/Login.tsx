@@ -1,14 +1,11 @@
 import AuthForm from "../components/AuthForm";
+import { ROUTES } from "../constants/constants";
 
 export default function Login() {
 
-  const login = async () => {
-
-  }
-
   return (
     <>
-        <AuthForm mode="login"/>
+        <AuthForm mode={`${ROUTES.LOGIN}`}/>
     </>
   )
 }
