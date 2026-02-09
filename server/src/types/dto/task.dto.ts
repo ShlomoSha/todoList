@@ -10,7 +10,3 @@ export interface UpdateTaskDTO {
     description?: string;
     isCompleted?: boolean;
 }
-
-export interface TaskResponseDTO extends ITask {
-    id: string;
-}
