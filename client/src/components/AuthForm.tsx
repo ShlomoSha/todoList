@@ -56,105 +56,97 @@ export default function AuthForm({mode}: authMode) {
 
   return (
     <>
-        <Box sx={{
-        height: '100%',
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        bgcolor: "#f5eee8ff"
-        }}>
-            <Container maxWidth="sm" >
-                <Box sx={{ textAlign: 'center', mb: 5 }}>
-                    <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-                        Welcom To TodoList
+        <Container maxWidth="sm" >
+            <Box sx={{ textAlign: 'center', mb: 5 }}>
+                <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+                    Welcom To TodoList
+                </Typography>
+            </Box>
+            <Paper elevation={6} sx={{
+                p: 4,
+                borderRadius: 3,
+            }}>
+                <Box sx={{ textAlign: 'center', mb: 2 }}>
+                    <Typography variant="h6" component="h1" gutterBottom>
+                        {isLogin ? "Login to your account" : "Register to TodoList"}
                     </Typography>
                 </Box>
-                <Paper elevation={6} sx={{
-                    p: 4,
-                    borderRadius: 3,
-                }}>
-                    <Box sx={{ textAlign: 'center', mb: 2 }}>
-                        <Typography variant="h6" component="h1" gutterBottom>
-                            {isLogin ? "Login to your account" : "Register to TodoList"}
+                <Box component="form" onSubmit={handleSubmit}>
+                    <TextField
+                        fullWidth
+                        label="username"
+                        type="text"
+                        variant="outlined"
+                        margin="normal"
+                        value={username}
+                        onChange={(e) => {
+                            setUsername(e.target.value)
+                            setError('')
+                        }}
+                        autoComplete="username"
+                        autoFocus
+                        error={submitted && username === ''}
+                        helperText={submitted && username === '' ? 'username is required' : ''}
+                        />
+                    <TextField
+                        fullWidth
+                        label="password"
+                        type={showPassword ? "text" : "password"}
+                        variant="outlined"
+                        margin="normal"
+                        value={password}
+                        onChange={(e) =>{
+                            setPassword(e.target.value)
+                            setError('')
+                        }}
+                        autoComplete={isLogin ? "current-password" : "new-password"}
+                        error={submitted && password === ''}
+                        helperText={submitted && password === '' ? 'password is required' : ''}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                            { showPassword ? <VisibilityOff /> : <Visibility/> }
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }
+                        }}
+                        />
+                    <Box sx={{textAlign: 'center', margin: 1, }}>
+                        <Typography variant="body2" color="text.secondary">
+                            {isLogin ? "Don't have account yet? " : "Back to "}
+                            <Link href={isLogin ? 'register' : 'login'} underline="hover" >
+                                {isLogin ? "sing up" : "login"}
+                            </Link>
                         </Typography>
                     </Box>
-                    <Box component="form" onSubmit={handleSubmit}>
-                        <TextField
-                            fullWidth
-                            label="username"
-                            type="text"
-                            variant="outlined"
-                            margin="normal"
-                            value={username}
-                            onChange={(e) => {
-                                setUsername(e.target.value)
-                                setError('')
-                            }}
-                            autoComplete="username"
-                            autoFocus
-                            error={submitted && username === ''}
-                            helperText={submitted && username === '' ? 'username is required' : ''}
-                            />
-                        <TextField
-                            fullWidth
-                            label="password"
-                            type={showPassword ? "text" : "password"}
-                            variant="outlined"
-                            margin="normal"
-                            value={password}
-                            onChange={(e) =>{
-                                setPassword(e.target.value)
-                                setError('')
-                            }}
-                            autoComplete={isLogin ? "current-password" : "new-password"}
-                            error={submitted && password === ''}
-                            helperText={submitted && password === '' ? 'password is required' : ''}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                >
-                                                { showPassword ? <VisibilityOff /> : <Visibility/> }
-                                            </IconButton>
-                                        </InputAdornment>
-                                    )
-                                }
-                            }}
-                            />
-                        <Box sx={{textAlign: 'center', margin: 1, }}>
-                            <Typography variant="body2" color="text.secondary">
-                                {isLogin ? "Don't have account yet? " : "Back to "}
-                                <Link href={isLogin ? 'register' : 'login'} underline="hover" >
-                                    {isLogin ? "sing up" : "login"}
-                                </Link>
-                            </Typography>
-                        </Box>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                            size="large"
-                            loading={loading}
-                            sx={{
-                                mt: '15px',
-                                py: 1.5,
-                                textTransform: 'none',
-                                fontSize: '1.1rem',
-                            }}
-                            >
-                            {isLogin ? "Sign in" : "Sign up"}
-                        </Button>
-                        {error && 
-                            <Typography variant="body2" align="center" color="error" sx={{ mt: 3 }}>
-                                {error}
-                            </Typography>
-                        }
-                    </Box>
-                </Paper>
-            </Container>
-        </Box>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        fullWidth
+                        size="large"
+                        loading={loading}
+                        sx={{
+                            mt: '15px',
+                            py: 1.5,
+                            textTransform: 'none',
+                            fontSize: '1.1rem',
+                        }}
+                        >
+                        {isLogin ? "Sign in" : "Sign up"}
+                    </Button>
+                    {error && 
+                        <Typography variant="body2" align="center" color="error" sx={{ mt: 3 }}>
+                            {error}
+                        </Typography>
+                    }
+                </Box>
+            </Paper>
+        </Container>
     </>
   )
 }
