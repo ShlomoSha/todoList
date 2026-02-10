@@ -3,4 +3,6 @@ import IUser from "./user.interface";
 
 export default interface UserDocument extends IUser, Document {
     password: string,
+    passwordRestToken: string,
+    passwordRestExpires: string,
 }

@@ -9,10 +9,25 @@ export const UserSchema = new Schema<UserDocument>(
             unique: true,
             trim: true,
         },
+        email: {
+            type: String,
+            required: [true, "email is required!"],
+            unique: true,
+            trim: true,
+            lowercase: true,
+        },
         password: {
             type: String,
             required: [true, "password is required!"],
             minLength: [6, "password must be at least 6 characters"],
+            select: false,
+        },
+        passwordRestToken: {
+            type: String,
+            select: false,
+        },
+        passwordRestExpires: {
+            type: String,
             select: false,
         },
     },
