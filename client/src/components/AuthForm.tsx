@@ -10,6 +10,7 @@ interface authMode {
 
 export default function AuthForm({mode}: authMode) {
     const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -26,7 +27,7 @@ export default function AuthForm({mode}: authMode) {
         setSubmitted(true)
         setError('')
 
-        if (username === '' || password === '') {
+        if (username === '' || password === '' || (!isLogin && email === '')) {
             setError('Something is missing')
             setLoading(false)
             return
@@ -35,18 +36,18 @@ export default function AuthForm({mode}: authMode) {
             let response;
 
             if (isLogin) {
-                response = await authService.login({username, password})
+                response = await authService.login({ username, password })
                 localStorage.setItem(TOKEN, response.data.token)
             }
             else {
-                response = await authService.register({username, password})
+                response = await authService.register({ username, email, password })
             }
 
             const destination = isLogin ? ROUTES.TASKS : ROUTES.LOGIN
 
             navigateTo(`/${destination}`)
         } catch (err: any) {
-            setError(err.response?.data.message || `${isLogin ? 'Login' : 'Registration'} failed. Please try again.`)
+            setError(err.response?.data.message || 'Server Error. Please try again later.')
             console.error(err.response?.data.message)
         }
         finally {
@@ -74,7 +75,7 @@ export default function AuthForm({mode}: authMode) {
                 <Box component="form" onSubmit={handleSubmit}>
                     <TextField
                         fullWidth
-                        label="username"
+                        label="Username"
                         type="text"
                         variant="outlined"
                         margin="normal"
@@ -88,9 +89,24 @@ export default function AuthForm({mode}: authMode) {
                         error={submitted && username === ''}
                         helperText={submitted && username === '' ? 'username is required' : ''}
                         />
+                    {!isLogin && <TextField
+                        fullWidth
+                        label="Email"
+                        type="email"
+                        variant="outlined"
+                        margin="normal"
+                        value={email}
+                        onChange={(e) => {
+                            setEmail(e.target.value)
+                            setError('')
+                        }}
+                        autoComplete="email"
+                        error={submitted && email === ''}
+                        helperText={submitted && email === '' ? 'email is required' : ''}
+                        />}
                     <TextField
                         fullWidth
-                        label="password"
+                        label="Password"
                         type={showPassword ? "text" : "password"}
                         variant="outlined"
                         margin="normal"
