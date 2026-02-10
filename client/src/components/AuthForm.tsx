@@ -8,6 +8,9 @@ interface authMode {
     mode: AuthMode
 }
 
+//TODO axois call when user type username email for check if already exist like this 
+// in client and server
+
 export default function AuthForm({mode}: authMode) {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
