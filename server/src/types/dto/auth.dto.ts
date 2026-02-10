@@ -1,7 +1,8 @@
-import IUser from "../../models/user/user.interface";
-
-export interface LoginDTO extends IUser {
-    password: string
+export interface LoginDTO {
+    username: string;
+    password: string;
 }
 
-export interface RegisterDTO extends LoginDTO {}
+export interface RegisterDTO extends LoginDTO {
+    email: string
+}
