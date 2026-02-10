@@ -59,7 +59,7 @@ export default function AuthForm({mode}: authMode) {
         <Container maxWidth="sm" >
             <Box sx={{ textAlign: 'center', mb: 5 }}>
                 <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
-                    Welcom To TodoList
+                    Welcome To TodoList
                 </Typography>
             </Box>
             <Paper elevation={6} sx={{
