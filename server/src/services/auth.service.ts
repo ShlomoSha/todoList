@@ -1,26 +1,25 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
-import { ConflictError, NotFoundError, UnauthorizedError } from "../errors/httpErrors";
+import { NotFoundError, UnauthorizedError } from "../errors/httpErrors";
 import { UserModel } from "../models/user/user.schema";
 import { LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import { JWT_SECRET } from "../config/env.config";
-import { validateData } from "../utils/validiation";
+import { validateData } from "../utils/validations";
+import { validateUserUniqueness } from "../utils/db.utils";
 
 export const createNewUser = async (userData: RegisterDTO) => {
 
-    validateData(userData, ['username', 'password'])
+    validateData(userData, ['username', 'email', 'password'])
 
-    const { username, password } = userData
-    const existUser = await UserModel.findOne({ username })
+    const { username, email, password } = userData
 
-    if (existUser) {
-        throw new ConflictError('User with this username already exist')
-    }
+    await validateUserUniqueness(username, email)
 
     const hashPass = await bcrypt.hash(password, 12)
     const newUser = await UserModel.create({
         username,
-        password: hashPass
+        password: hashPass,
+        email,
     })
     const { password: _, ...userResponse } = newUser.toObject()
     

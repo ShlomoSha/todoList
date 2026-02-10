@@ -2,7 +2,7 @@ import { Types } from "mongoose"
 import { TaskModel } from "../models/tasks/task.schema"
 import { CreateTaskDTO, UpdateTaskDTO } from "../types/dto/task.dto"
 import { BadRequestError, NotFoundError } from "../errors/httpErrors"
-import { validateData } from "../utils/validiation"
+import { validateData } from "../utils/validations"
 
 export const findAllTasks = async (userId: string) => {
     const query = { assignedTo: new Types.ObjectId(userId) }
