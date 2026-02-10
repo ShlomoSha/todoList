@@ -8,14 +8,16 @@ export const setServerInstance = (server: Server): void => {
 }
 
 export const setUpProcessHandlers = (): void => {
-    process.on('SIGTERM', async () => await gracefulShutdown('SIGTERM', null, serverInstance))
-    process.on('SIGINT', async () => await gracefulShutdown('SIGINT', null, serverInstance))
+    // process.on('SIGTERM', async () => await gracefulShutdown('SIGTERM', null, serverInstance))
+    // process.on('SIGINT', async () => await gracefulShutdown('SIGINT', null, serverInstance))
 
     process.on('uncaughtException', async (err: Error) => {
-        await gracefulShutdown('uncaughtException', err, serverInstance)
+        console.error('Unhandled Exception:', err)
+        // await gracefulShutdown('uncaughtException', err, serverInstance)
     })
 
     process.on('unhandledRejection', async (err: Error) => {
-            await gracefulShutdown('unhandledRejection', err, serverInstance)
+        console.error('Unhandled Rejection:', err)
+            // await gracefulShutdown('unhandledRejection', err, serverInstance)
         })
 }
