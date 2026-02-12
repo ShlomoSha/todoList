@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import bcrypt from "bcrypt"
 import UserDocument from "./user.model";
 
 export const UserSchema = new Schema<UserDocument>(
@@ -27,7 +28,7 @@ export const UserSchema = new Schema<UserDocument>(
             select: false,
         },
         passwordRestExpires: {
-            type: String,
+            type: Date,
             select: false,
         },
     },
@@ -36,5 +37,11 @@ export const UserSchema = new Schema<UserDocument>(
         versionKey: false,
     }
 )
+
+UserSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) return next()
+    this.password = await bcrypt.hash(this.password, 12)
+    next()
+}) 
 
 export const UserModel = model<UserDocument>("Users", UserSchema)
