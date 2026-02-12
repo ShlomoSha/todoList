@@ -15,11 +15,10 @@ export const createNewUser = async (userData: RegisterDTO) => {
 
     await validateUserUniqueness(username, email)
 
-    const hashPass = await bcrypt.hash(password, 12)
     const newUser = await UserModel.create({
         username,
-        password: hashPass,
         email,
+        password,
     })
     const { password: _, ...userResponse } = newUser.toObject()
     
