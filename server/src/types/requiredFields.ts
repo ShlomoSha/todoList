@@ -1,5 +1,7 @@
 export type RequiredFields = 
-    'username' | 
-    'password' |
-    'email'    |
-    'title'
+    'username'   | 
+    'password'   |
+    'newPassword'|
+    'email'      |
+    'title'      |
+    'rawToken' 
