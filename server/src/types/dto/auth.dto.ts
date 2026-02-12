@@ -6,3 +6,8 @@ export interface LoginDTO {
 export interface RegisterDTO extends LoginDTO {
     email: string
 }
+
+export interface ResetPasswordDTO {
+    rawToken: string;
+    newPassword: string;
+}
