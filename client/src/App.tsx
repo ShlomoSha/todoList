@@ -3,6 +3,7 @@ import Login from "./pages/Login"
 import Register from "./pages/Register"
 import Tasks from "./pages/Tasks"
 import AppLayout from "./layouts/AppLayout"
+import AuthLayout from "./layouts/AuthLayout"
 
 function App() {
 
@@ -11,8 +12,10 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path='/'element={<Navigate to={'login'} />} />
-          <Route path='login' element={<Login />} />
-          <Route path='register' element={<Register />} />
+          <Route element={<AuthLayout />}>
+            <Route path='login' element={<Login />} />
+            <Route path='register' element={<Register />} />
+          </Route>
           <Route path='tasks' element={<Tasks />} />
         </Route>
       </Routes>
