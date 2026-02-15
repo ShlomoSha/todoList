@@ -1,5 +1,4 @@
-import { Box, Button, CircularProgress, Link as MuiLink, Typography } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Box, Button, CircularProgress, Typography } from "@mui/material"
 import AuthContainer from "./AuthContainer"
 import AuthFormFields from "./AuthFormFields"
 import { useAuthForm } from "../../hooks/useAuthForm"

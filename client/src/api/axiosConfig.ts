@@ -1,5 +1,6 @@
 import axios from "axios";
-import { ROUTES, TOKEN } from "../constants/constants";
+import { TOKEN } from "../constants/constants";
+import { ROUTES } from "../routes/routes.constants";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_SERVER_URL,

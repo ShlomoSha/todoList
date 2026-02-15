@@ -1,5 +1,6 @@
-import { ROUTES, TOKEN } from "../constants/constants";
-import type { LoginDTO, RegisterDTO } from "../types/auth.dto";
+import { TOKEN } from "../constants/constants";
+import { ROUTES } from "../routes/routes.constants";
+import type { LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import createEndpoint from "./apiHelper.utlis";
 import axiosInstance from "./axiosConfig";
 

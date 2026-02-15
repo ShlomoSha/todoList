@@ -1,5 +1,5 @@
-import { ROUTES } from "../constants/constants";
-import type { CreateTaskDTO, UpdateTaskDTO } from "../types/tasks.dto";
+import { ROUTES } from "../routes/routes.constants";
+import type { CreateTaskDTO, UpdateTaskDTO } from "../types/dto/tasks.dto";
 import createEndpoint from "./apiHelper.utlis";
 import axiosInstance from "./axiosConfig";
 
