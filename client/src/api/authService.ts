@@ -1,6 +1,6 @@
 import { TOKEN } from "../constants/constants";
 import { ROUTES } from "../routes/routes.constants";
-import type { LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
+import type { CheckDTO, LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import createEndpoint from "./apiHelper.utlis";
 import axiosInstance from "./axiosConfig";
 
@@ -12,7 +12,7 @@ const authService = {
     logout: async () => {
         localStorage.removeItem(TOKEN)
     },
+    checkAvailability: (checkData: CheckDTO) => axiosInstance.post(authEndpoint(ROUTES.CHECK_AVAILABILITY), checkData),
 }
 
 export default authService
-
