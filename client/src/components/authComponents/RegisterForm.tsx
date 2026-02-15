@@ -21,6 +21,10 @@ export default function RegisterForm() {
                     submitted={authForm.submitted}
                     isLogin={false}
                     clearError={authForm.clearError}
+                    usernameAvailable={authForm.usernameAvailable}
+                    emailAvailable={authForm.emailAvailable}
+                    checkingUsername={authForm.checkingUsername}
+                    checkingEmail={authForm.checkingEmail}
                 />
 
                 <Button
