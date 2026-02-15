@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import authService from "../api/authService"
 import { TOKEN } from "../constants/constants"
 import { ROUTES } from "../routes/routes.constants"
+import { useFieldAvailability } from "./useFieldAvailability"
 
 interface UseAuthFormProps {
     isLogin: boolean
@@ -16,6 +17,18 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
     const [loading, setLoading] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+
+    const { available: usernameAvailable, checking: checkingUsername } = useFieldAvailability({
+        field: 'username',
+        value: username,
+        enabled: !isLogin
+    })
+
+    const { available: emailAvailable, checking: checkingEmail } = useFieldAvailability({
+        field: 'email',
+        value: email,
+        enabled: !isLogin,
+    })
 
     const navigateTo = useNavigate()
 
@@ -66,6 +79,11 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
         loading,
         submitted,
         showPassword,
+
+        usernameAvailable,
+        emailAvailable,
+        checkingUsername,
+        checkingEmail,
         
         // Setters
         setUsername,
