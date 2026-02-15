@@ -24,15 +24,6 @@ export default function RegisterForm() {
                     clearError={authForm.clearError}
                 />
 
-                <Box sx={{ textAlign: 'center', margin: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Back to{' '}
-                        <MuiLink component={Link} to="/login" underline="hover">
-                            login
-                        </MuiLink>
-                    </Typography>
-                </Box>
-
                 <Button
                     type="submit"
                     variant="contained"
