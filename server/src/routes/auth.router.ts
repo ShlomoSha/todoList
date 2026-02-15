@@ -6,7 +6,7 @@ const authRouter = Router()
 
 authRouter.post("/register", register)
 authRouter.post("/login", login)
-authRouter.get("/check-availability", checkAvailability)
+authRouter.post("/check-availability", checkAvailability)
 authRouter.get("/me", protect, getCurrentUser)
 authRouter.post("/forgot-password", requestPasswordReset)
 authRouter.post("/reset-password", resetUserPassword)
