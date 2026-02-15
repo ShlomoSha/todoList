@@ -1,7 +1,7 @@
 import AppLayout from "../layouts/AppLayout";
 import AuthLayout from "../layouts/AuthLayout";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
+import Login from "../pages/authPages/Login";
+import Register from "../pages/authPages/Register";
 import Tasks from "../pages/Tasks";
 import { ROUTES } from "./routes.constants";
 import type { RouteConfig } from "./routes.interface";
