@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
-import { NotFoundError, UnauthorizedError } from "../errors/httpErrors";
+import { ConflictError, NotFoundError, UnauthorizedError } from "../errors/httpErrors";
 import { UserModel } from "../models/user/user.schema";
 import { CheckDTO, LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import { JWT_SECRET } from "../config/env.config";
@@ -13,7 +13,11 @@ export const createNewUser = async (userData: RegisterDTO) => {
 
     const { username, email, password } = userData
 
-    await validateUserUniqueness(username, email)
+    const { available, message } = await validateUserUniqueness(username, email)
+
+    if (!available) {
+        throw new ConflictError(message)
+    }
 
     const newUser = await UserModel.create({
         username,
@@ -59,8 +63,8 @@ export const userLogin = async (credentials: LoginDTO) => {
 
 export const checkUserUniqueness = async (data: CheckDTO) => {
     const { username, email } = data
-
-    await validateUserUniqueness(username, email)
+    const result = await validateUserUniqueness(username, email)
+    return result
 }
 
 export const getUserById = async (userId: string) => {

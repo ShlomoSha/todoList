@@ -23,10 +23,11 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const checkAvailability = asyncHandler(async (req: Request, res: Response) => {
-    await checkUserUniqueness(req.body)
+    const { available, message } = await checkUserUniqueness(req.body)
+
     res.json({
-        success: true,
-        message: 'There is no user with this details',
+        available: available,
+        message: message
     })
 })
 
