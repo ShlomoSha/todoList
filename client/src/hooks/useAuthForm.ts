@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import authService from "../api/authService"
-import { ROUTES, TOKEN } from "../constants/constants"
+import { TOKEN } from "../constants/constants"
+import { ROUTES } from "../routes/routes.constants"
 
 interface UseAuthFormProps {
     isLogin: boolean
@@ -43,7 +44,7 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
                 navigateTo(`/${ROUTES.TASKS}`)
             } else {
                 await authService.register({ username, email, password })
-                navigateTo(`/${ROUTES.LOGIN}`)
+                navigateTo(`/${ROUTES.AUTH}/${ROUTES.LOGIN}`)
             }
 
         } catch (err: any) {

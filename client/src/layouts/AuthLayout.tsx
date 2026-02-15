@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { Box, Button, Stack } from "@mui/material"
 import { useLocation, useNavigate, useOutlet } from "react-router-dom"
+import { ROUTES } from "../routes/routes.constants"
 
 export default function AuthLayout() {
     const navigateTo = useNavigate()
@@ -28,7 +29,7 @@ export default function AuthLayout() {
             >
                 <Button
                     variant={isLoginPage ? "contained" : "outlined"}
-                    onClick={() => navigateTo("/login")}
+                    onClick={() => navigateTo(`/${ROUTES.AUTH}/${ROUTES.LOGIN}`)}
                     sx={{
                         minWidth: 100,
                         fontWeight: isLoginPage ? 'bold' : 'normal',
@@ -40,7 +41,7 @@ export default function AuthLayout() {
                 </Button>
                 <Button
                     variant={!isLoginPage ? "contained" : "outlined"}
-                    onClick={() => navigateTo("/register")}
+                    onClick={() => navigateTo(`/${ROUTES.AUTH}/${ROUTES.REGISTER}`)}
                     sx={{
                         minWidth: 100,
                         fontWeight: !isLoginPage ? 'bold' : 'normal',
