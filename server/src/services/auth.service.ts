@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 import { NotFoundError, UnauthorizedError } from "../errors/httpErrors";
 import { UserModel } from "../models/user/user.schema";
-import { LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
+import { CheckDTO, LoginDTO, RegisterDTO } from "../types/dto/auth.dto";
 import { JWT_SECRET } from "../config/env.config";
 import { validateData } from "../utils/validations";
 import { validateUserUniqueness } from "../utils/db.utils";
@@ -55,6 +55,12 @@ export const userLogin = async (credentials: LoginDTO) => {
             username: user.username
         }
     }
+}
+
+export const checkUserUniqueness = async (data: CheckDTO) => {
+    const { username, email } = data
+
+    await validateUserUniqueness(username, email)
 }
 
 export const getUserById = async (userId: string) => {

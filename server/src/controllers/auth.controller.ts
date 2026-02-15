@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
 import { asyncHandler } from "../utils/asyncHandler"
-import { createNewUser, userLogin } from "../services/auth.service"
+import { checkUserUniqueness, createNewUser, userLogin } from "../services/auth.service"
 import { forgotPassword, resetPassword } from "../services/password.serviece"
+import { validateUserUniqueness } from "../utils/db.utils"
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
     const newUser = await createNewUser(req.body)
@@ -18,6 +19,14 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
         success: true,
         message: 'User logged in successfully',
         data: { loginData }
+    })
+})
+
+export const checkAvailability = asyncHandler(async (req: Request, res: Response) => {
+    await checkUserUniqueness(req.body)
+    res.json({
+        success: true,
+        message: 'There is no user with this details',
     })
 })
 
