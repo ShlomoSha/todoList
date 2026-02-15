@@ -1,11 +1,10 @@
-import AuthForm from "../components/AuthForm";
-import { ROUTES } from "../constants/constants";
+import LoginForm from "../components/authComponents/LoginForm";
 
 export default function Login() {
 
   return (
     <>
-        <AuthForm mode={`${ROUTES.LOGIN}`}/>
+        <LoginForm />
     </>
   )
 }

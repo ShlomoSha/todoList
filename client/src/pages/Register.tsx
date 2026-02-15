@@ -1,11 +1,10 @@
-import AuthForm from "../components/AuthForm";
-import { ROUTES } from "../constants/constants";
+import RegisterForm from "../components/authComponents/RegisterForm";
 
 export default function Register() {
 
   return (
     <>
-      <AuthForm mode={`${ROUTES.REGISTER}`} />
+      <RegisterForm />
     </>
   )
 }
