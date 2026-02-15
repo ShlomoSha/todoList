@@ -1,5 +1,5 @@
-import { Visibility, VisibilityOff } from "@mui/icons-material"
-import { IconButton, InputAdornment, TextField } from "@mui/material"
+import { Cancel, CheckCircle, Visibility, VisibilityOff } from "@mui/icons-material"
+import { CircularProgress, IconButton, InputAdornment, TextField } from "@mui/material"
 
 interface AuthFormFieldsProps {
     username: string
@@ -13,6 +13,10 @@ interface AuthFormFieldsProps {
     submitted: boolean
     isLogin: boolean
     clearError: () => void
+    usernameAvailable?: boolean | null
+    emailAvailable?: boolean | null
+    checkingUsername?: boolean
+    checkingEmail?: boolean
 }
 
 export default function AuthFormFields({
@@ -27,7 +31,77 @@ export default function AuthFormFields({
     submitted,
     isLogin,
     clearError,
+    usernameAvailable,
+    emailAvailable,
+    checkingUsername,
+    checkingEmail,
 }: AuthFormFieldsProps) {
+
+    צריך לאחד את הפונקציות
+    לשים את השגיאה בצבע אדום
+    ולבדוק אם אחנו רוצים את הסימונים האלה
+    .length < 3 האם אניחנו רוצים כזה דבר
+
+     const getUsernameEndAdornment = () => {
+        if (isLogin || username.length < 3) return null
+        
+        if (checkingUsername) {
+            return (
+                <InputAdornment position="end">
+                    <CircularProgress size={20} />
+                </InputAdornment>
+            )
+        }
+        
+        if (usernameAvailable === true) {
+            return (
+                <InputAdornment position="end">
+                    <CheckCircle color="success" />
+                </InputAdornment>
+            )
+        }
+        
+        if (usernameAvailable === false) {
+            return (
+                <InputAdornment position="end">
+                    <Cancel color="error" />
+                </InputAdornment>
+            )
+        }
+        
+        return null
+    }
+    
+    const getEmailEndAdornment = () => {
+        if (isLogin || !email || email.length < 3 || !email.includes('@')) return null
+        
+        if (checkingEmail) {
+            return (
+                <InputAdornment position="end">
+                    <CircularProgress size={20} />
+                </InputAdornment>
+            )
+        }
+        
+        if (emailAvailable === true) {
+            return (
+                <InputAdornment position="end">
+                    <CheckCircle color="success" />
+                </InputAdornment>
+            )
+        }
+        
+        if (emailAvailable === false) {
+            return (
+                <InputAdornment position="end">
+                    <Cancel color="error" />
+                </InputAdornment>
+            )
+        }
+        
+        return null
+    }
+
     return (
         <>
             <TextField
@@ -43,8 +117,17 @@ export default function AuthFormFields({
                 }}
                 autoComplete="username"
                 autoFocus
-                error={submitted && username === ''}
-                helperText={submitted && username === '' ? 'username is required' : ''}
+                error={submitted && (username === '' || (!isLogin && usernameAvailable === false))}
+                helperText={
+                    submitted && username === '' ? 'username is required' :
+                     !isLogin && usernameAvailable === false 
+                    ? 'Username already taken' : ''
+                }
+                slotProps={{
+                    input: {
+                        endAdornment: getUsernameEndAdornment()
+                    }
+                }}
             />
             
             {!isLogin && setEmail && (
@@ -61,7 +144,18 @@ export default function AuthFormFields({
                     }}
                     autoComplete="email"
                     error={submitted && email === ''}
-                    helperText={submitted && email === '' ? 'email is required' : ''}
+                    helperText={
+                        submitted && email === '' 
+                            ? 'email is required' 
+                            : emailAvailable === false 
+                            ? 'Email already registered' 
+                            : ''
+                    }
+                    slotProps={{
+                        input: {
+                            endAdornment: getEmailEndAdornment()
+                        }
+                    }}
                 />
             )}
             
