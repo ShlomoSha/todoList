@@ -14,7 +14,7 @@ export const useFieldAvailability = ({
     field,
     value,
     enabled,
-    minLength = 1,
+    minLength = 3,
     customValidation,
     debounceMs = 500
 }: UseFieldAvailabilityOptions) => {
