@@ -4,6 +4,7 @@ import authService from "../api/authService"
 import { TOKEN } from "../constants/constants"
 import { ROUTES } from "../routes/routes.constants"
 import { useFieldAvailability } from "./useFieldAvailability"
+import { isValidEmail } from "../utils/validation/authForm.validation"
 
 interface UseAuthFormProps {
     isLogin: boolean
@@ -28,6 +29,7 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
         field: 'email',
         value: email,
         enabled: !isLogin,
+        customValidation: isValidEmail
     })
 
     const navigateTo = useNavigate()
