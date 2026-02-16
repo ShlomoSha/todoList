@@ -1,4 +1,4 @@
-import { Cancel, CheckCircle, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Check, Close, Visibility, VisibilityOff } from "@mui/icons-material"
 import { CircularProgress, IconButton, InputAdornment, TextField } from "@mui/material"
 
 interface AuthFormFieldsProps {
@@ -37,15 +37,10 @@ export default function AuthFormFields({
     checkingEmail,
 }: AuthFormFieldsProps) {
 
-    צריך לאחד את הפונקציות
-    לשים את השגיאה בצבע אדום
-    ולבדוק אם אחנו רוצים את הסימונים האלה
-    .length < 3 האם אניחנו רוצים כזה דבר
-
-     const getUsernameEndAdornment = () => {
-        if (isLogin || username.length < 3) return null
+    const getFieldEndAdornment = (checkingField: boolean | undefined, valueAvailable: boolean | null | undefined) => {
+        if (isLogin) return null
         
-        if (checkingUsername) {
+        if (checkingField) {
             return (
                 <InputAdornment position="end">
                     <CircularProgress size={20} />
@@ -53,18 +48,18 @@ export default function AuthFormFields({
             )
         }
         
-        if (usernameAvailable === true) {
+        if (valueAvailable === true) {
             return (
                 <InputAdornment position="end">
-                    <CheckCircle color="success" />
+                    <Check color="success" />
                 </InputAdornment>
             )
         }
         
-        if (usernameAvailable === false) {
+        if (valueAvailable === false) {
             return (
                 <InputAdornment position="end">
-                    <Cancel color="error" />
+                    <Close color="error" />
                 </InputAdornment>
             )
         }
@@ -72,36 +67,6 @@ export default function AuthFormFields({
         return null
     }
     
-    const getEmailEndAdornment = () => {
-        if (isLogin || !email || email.length < 3 || !email.includes('@')) return null
-        
-        if (checkingEmail) {
-            return (
-                <InputAdornment position="end">
-                    <CircularProgress size={20} />
-                </InputAdornment>
-            )
-        }
-        
-        if (emailAvailable === true) {
-            return (
-                <InputAdornment position="end">
-                    <CheckCircle color="success" />
-                </InputAdornment>
-            )
-        }
-        
-        if (emailAvailable === false) {
-            return (
-                <InputAdornment position="end">
-                    <Cancel color="error" />
-                </InputAdornment>
-            )
-        }
-        
-        return null
-    }
-
     return (
         <>
             <TextField
@@ -125,7 +90,7 @@ export default function AuthFormFields({
                 }
                 slotProps={{
                     input: {
-                        endAdornment: getUsernameEndAdornment()
+                        endAdornment: getFieldEndAdornment(checkingUsername, usernameAvailable)
                     }
                 }}
             />
@@ -153,7 +118,7 @@ export default function AuthFormFields({
                     }
                     slotProps={{
                         input: {
-                            endAdornment: getEmailEndAdornment()
+                            endAdornment: getFieldEndAdornment(checkingEmail, emailAvailable)
                         }
                     }}
                 />
