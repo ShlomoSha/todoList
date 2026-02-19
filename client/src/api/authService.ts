@@ -4,7 +4,7 @@ import type { CheckDTO, LoginDTO, RegisterDTO, ResetPasswordDTO } from "../types
 import createEndpoint from "./apiHelper.utlis";
 import axiosInstance from "./axiosConfig";
 
-const authEndpoint = createEndpoint(ROUTES.AUTH)
+export const authEndpoint = createEndpoint(ROUTES.AUTH)
 
 const authService = {
     login: (credentials: LoginDTO) => axiosInstance.post(authEndpoint(ROUTES.LOGIN), credentials),

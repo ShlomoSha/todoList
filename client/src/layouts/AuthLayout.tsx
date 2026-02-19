@@ -2,14 +2,15 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Box, Button, Stack } from "@mui/material"
 import { useLocation, useNavigate, useOutlet } from "react-router-dom"
 import { ROUTES } from "../routes/routes.constants"
+import { authEndpoint } from "../api/authService"
 
 export default function AuthLayout() {
     const navigateTo = useNavigate()
     const location = useLocation()
     const outlet = useOutlet()
     
-    const isLoginPage = location.pathname === "/auth/login"
-    console.log(isLoginPage)
+    const isLoginPage = location.pathname === `${authEndpoint(ROUTES.LOGIN)}`
+    const isRegisterPage = location.pathname === `${authEndpoint(ROUTES.REGISTER)}`
     
     return (
         <Box 
@@ -41,12 +42,12 @@ export default function AuthLayout() {
                     Login
                 </Button>
                 <Button
-                    variant={!isLoginPage ? "contained" : "outlined"}
+                    variant={!isLoginPage && isRegisterPage ? "contained" : "outlined"}
                     onClick={() => navigateTo(`/${ROUTES.AUTH}/${ROUTES.REGISTER}`)}
                     sx={{
                         minWidth: 100,
-                        fontWeight: !isLoginPage ? 'bold' : 'normal',
-                        borderColor: !isLoginPage ? undefined : 'primary.main',
+                        fontWeight: !isLoginPage && isRegisterPage ? 'bold' : 'normal',
+                        borderColor: !isLoginPage && isRegisterPage ? undefined : 'primary.main',
                         color: !isLoginPage ? undefined : 'primary.main',
                     }}
                 >
