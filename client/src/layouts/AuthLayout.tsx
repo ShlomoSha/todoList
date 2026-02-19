@@ -8,7 +8,8 @@ export default function AuthLayout() {
     const location = useLocation()
     const outlet = useOutlet()
     
-    const isLoginPage = location.pathname === "/login"
+    const isLoginPage = location.pathname === "/auth/login"
+    console.log(isLoginPage)
     
     return (
         <Box 
