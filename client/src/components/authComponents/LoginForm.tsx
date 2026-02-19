@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import AuthContainer from "./AuthContainer"
 import AuthFormFields from "./AuthFormFields"
 import { useAuthForm } from "../../hooks/useAuthForm"
+import { ROUTES } from "../../routes/routes.constants"
 
 export default function LoginForm() {
     const authForm = useAuthForm({ isLogin: true })
@@ -23,12 +24,9 @@ export default function LoginForm() {
                 />
 
                 <Box sx={{ textAlign: 'center', margin: 1 }}>
-                    <Typography variant="body2" color="text.secondary">
-                        Don't have account yet?{' '}
-                        <MuiLink component={Link} to="/register" underline="hover">
-                            sign up
-                        </MuiLink>
-                    </Typography>
+                    <MuiLink component={Link} to={`/${ROUTES.AUTH}/${ROUTES.FORGOT_PASSWORD}`} variant="body2" underline="hover">
+                        forgot your password?
+                    </MuiLink>
                 </Box>
 
                 <Button
