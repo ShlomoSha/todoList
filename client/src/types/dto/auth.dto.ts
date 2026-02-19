@@ -11,3 +11,8 @@ export interface CheckDTO {
     username?: string
     email?: string
 }
+
+export interface ResetPasswordDTO {
+    rawToken: string;
+    newPassword: string;
+}
