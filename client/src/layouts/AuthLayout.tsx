@@ -31,7 +31,7 @@ export default function AuthLayout() {
             >
                 <Button
                     variant={isLoginPage ? "contained" : "outlined"}
-                    onClick={() => navigateTo(`/${ROUTES.AUTH}/${ROUTES.LOGIN}`)}
+                    onClick={() => navigateTo(`/${authEndpoint(ROUTES.LOGIN)}`)}
                     sx={{
                         minWidth: 100,
                         fontWeight: isLoginPage ? 'bold' : 'normal',
@@ -43,7 +43,7 @@ export default function AuthLayout() {
                 </Button>
                 <Button
                     variant={!isLoginPage && isRegisterPage ? "contained" : "outlined"}
-                    onClick={() => navigateTo(`/${ROUTES.AUTH}/${ROUTES.REGISTER}`)}
+                    onClick={() => navigateTo(`/${authEndpoint(ROUTES.REGISTER)}`)}
                     sx={{
                         minWidth: 100,
                         fontWeight: !isLoginPage && isRegisterPage ? 'bold' : 'normal',
