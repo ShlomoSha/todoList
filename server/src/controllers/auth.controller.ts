@@ -15,10 +15,10 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
     const loginData = await userLogin(req.body)
-    res.status(201).json({
+    res.status(200).json({
         success: true,
         message: 'User logged in successfully',
-        data: { loginData }
+        loginData
     })
 })
 
