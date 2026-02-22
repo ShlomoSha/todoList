@@ -4,6 +4,8 @@ export const ROUTES = {
     REGISTER: 'register',
     TASKS: 'tasks',
     ALL_TASKS: 'all-tasks',
+    PENDING: 'pending',
+    DONE: 'done',
     STATS: 'stats',
     TOGGLE: 'toggle',
     CHECK_AVAILABILITY: 'check-availability',
