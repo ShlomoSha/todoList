@@ -1,5 +1,6 @@
 import AppLayout from "../layouts/AppLayout";
 import AuthLayout from "../layouts/AuthLayout";
+import TasksLayout from "../layouts/TasksLayout";
 import ForgotPassword from "../pages/authPages/ForgotPassword";
 import Login from "../pages/authPages/Login";
 import Register from "../pages/authPages/Register";
@@ -39,7 +40,14 @@ const appRoute: RouteConfig[] = [
             },
             {
                 path: ROUTES.TASKS,
-                component: Tasks
+                component: TasksLayout,
+                defaultRoute: ROUTES.ALL_TASKS,
+                children: [
+                    {
+                        path: ROUTES.ALL_TASKS,
+                        component: Tasks
+                    }
+                ]
             }
         ]
     }
