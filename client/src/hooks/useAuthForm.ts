@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import authService from "../api/authService"
-import { TOKEN } from "../constants/constants"
+import authService, { authEndpoint } from "../api/authService"
 import { ROUTES } from "../routes/routes.constants"
 import { useFieldAvailability } from "./useFieldAvailability"
 import { isValidEmail } from "../utils/validation/authForm.validation"
+import useLocalStorage from "./useLocalStorage"
 
 interface UseAuthFormProps {
     isLogin: boolean
@@ -32,6 +32,8 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
         customValidation: isValidEmail
     })
 
+    const { addTokenLs, addUsernameLs } = useLocalStorage()
+
     const navigateTo = useNavigate()
 
     const validateForm = () => {
@@ -55,11 +57,12 @@ export function useAuthForm({ isLogin }: UseAuthFormProps) {
         try {
             if (isLogin) {
                 const response = await authService.login({ username, password })
-                localStorage.setItem(TOKEN, response.data.token)
+                addTokenLs(response.data.loginData.token)
+                addUsernameLs(username)
                 navigateTo(`/${ROUTES.TASKS}`)
             } else {
                 await authService.register({ username, email, password })
-                navigateTo(`/${ROUTES.AUTH}/${ROUTES.LOGIN}`)
+                navigateTo(authEndpoint(ROUTES.LOGIN))
             }
 
         } catch (err: any) {

@@ -1,6 +1,8 @@
 import axios from "axios";
-import { TOKEN } from "../constants/constants";
 import { ROUTES } from "../routes/routes.constants";
+import useLocalStorage from "../hooks/useLocalStorage";
+
+const { getToken } = useLocalStorage()
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BASE_SERVER_URL,
@@ -12,7 +14,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-            const token = localStorage.getItem(TOKEN)
+            const token = getToken()
             
             if (token) {
                 config.headers.Authorization = `Bearer ${token}`
@@ -24,7 +26,7 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error)
     },
     {
-        runWhen: (config) => !config.url?.includes(`/${ROUTES.REGISTER}`)
+        runWhen: (config) => !config.url?.includes(`/${ROUTES.AUTH}`)
     }
 )
 
