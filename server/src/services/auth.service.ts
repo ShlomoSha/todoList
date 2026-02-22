@@ -56,7 +56,8 @@ export const userLogin = async (credentials: LoginDTO) => {
         token,
         user: {
             id: user._id,
-            username: user.username
+            username: user.username,
+            email: user.email
         }
     }
 }
