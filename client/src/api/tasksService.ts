@@ -3,7 +3,7 @@ import type { CreateTaskDTO, UpdateTaskDTO } from "../types/dto/tasks.dto";
 import createEndpoint from "./apiHelper.utlis";
 import axiosInstance from "./axiosConfig";
 
-const taskEndpoint = createEndpoint(ROUTES.TASKS)
+export const taskEndpoint = createEndpoint(ROUTES.TASKS)
 
 const tasksService = {
     getAllTasks: () => axiosInstance.get(taskEndpoint(ROUTES.TASKS)),
