@@ -5,6 +5,7 @@ import ForgotPassword from "../pages/authPages/ForgotPassword";
 import Login from "../pages/authPages/Login";
 import Register from "../pages/authPages/Register";
 import ResetPassword from "../pages/authPages/ResetPassword";
+import Profile from "../pages/Profile";
 import Tasks from "../pages/Tasks";
 import { ROUTES } from "./routes.constants";
 import type { RouteConfig } from "./routes.interface";
@@ -46,7 +47,19 @@ const appRoute: RouteConfig[] = [
                     {
                         path: ROUTES.ALL_TASKS,
                         component: Tasks
-                    }
+                    },
+                    {
+                        path: ROUTES.PENDING,
+                        component: Tasks
+                    },
+                    {
+                        path: ROUTES.DONE,
+                        component: Tasks
+                    },
+                    {
+                        path: ROUTES.PROFILE,
+                        component: Profile
+                    },
                 ]
             }
         ]
