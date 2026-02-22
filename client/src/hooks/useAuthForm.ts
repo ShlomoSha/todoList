@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import authService, { authEndpoint } from "../api/authService"
 import { ROUTES } from "../routes/routes.constants"
 import { useFieldAvailability } from "./useFieldAvailability"
 import { isValidEmail } from "../utils/validation/authForm.validation"
 import useLocalStorage from "./useLocalStorage"
+import { authEndpoint, authService } from "../api/authService"
 
 interface UseAuthFormProps {
     isLogin: boolean

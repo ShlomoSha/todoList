@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import authService from "../api/authService"
+import { authService } from "../api/authService"
 
 interface UseFieldAvailabilityOptions {
     field: 'username' | 'email'
@@ -21,7 +21,7 @@ export const useFieldAvailability = ({
     const [available, setAvailable] = useState<boolean | null>(null)
     const [checking, setChecking] = useState(false)
 
-     useEffect(() => {
+    useEffect(() => {
         if (!enabled || value.length < minLength) {
             setAvailable(null)
             return
