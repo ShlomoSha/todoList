@@ -1,4 +1,4 @@
-export const isValidUsername = (username: string) => {
+export const isValidUsername = (_username: string) => {
     
 }
 
