@@ -1,0 +1,25 @@
+import { useQuery } from "@tanstack/react-query";
+import { authService } from "../../api/authService";
+import type { IUser } from "../../types/auth.interface";
+import useLocalStorage from "../useLocalStorage";
+
+export const USER_QUERY_KEY = ["user", "me"] as const;
+
+export const useUser = () => {
+    const { getToken } = useLocalStorage()
+
+    return useQuery({
+        queryKey: USER_QUERY_KEY,
+        queryFn: async () => {
+            const response = await authService.getMe();
+            const user = response.data.data.user;
+            return {
+                ...user,
+                id: user._id || user.id 
+            } as IUser;
+        },
+
+        enabled: !!getToken(),
+        retry: false,
+    });
+};

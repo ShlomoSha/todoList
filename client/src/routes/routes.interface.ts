@@ -9,5 +9,6 @@ export interface RouteConfig<TLoaderData = any> {
     component?: React.ComponentType;
     defaultRoute?: string;
     loader?: LoaderFunction<TLoaderData>;
-    children?: RouteConfig[]
+    children?: RouteConfig[];
+    protected?: boolean;
 }

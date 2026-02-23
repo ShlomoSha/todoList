@@ -7,6 +7,8 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import { Logout } from "@mui/icons-material";
 import { ROUTES } from "../routes/routes.constants";
 import { taskEndpoint } from "../api/tasksService";
+import { colors } from "../config/theme";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SIDEBAR_WIDTH = 248;
 
@@ -14,6 +16,7 @@ export default function TasksLayout() {
     const navigateTo = useNavigate()
     const location = useLocation()
     const { deleteToken, getUsername, deleteUsernameLs } = useLocalStorage()
+    const queryClient = useQueryClient()
 
     const isActive = (path: string) => {
       if (path === taskEndpoint(ROUTES.TASKS)) return location.pathname === taskEndpoint(ROUTES.TASKS);
@@ -23,19 +26,20 @@ export default function TasksLayout() {
     const logout = async () => {
       deleteToken()
       deleteUsernameLs()
+      queryClient.clear()
       navigateTo('/')
     }
 
   return (
-    <Box>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
       <Drawer variant="permanent" anchor="left" sx={{
         width: SIDEBAR_WIDTH,
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: SIDEBAR_WIDTH,
           boxSizing: "border-box",
-          bgcolor: "#faf6f2",
-          borderRight: "1px solid #e8ddd4",
+          bgcolor: colors.sidebarBg,
+          borderRight: `1px solid ${colors.border}`,
           borderLeft: "none",
           display: "flex",
           flexDirection: "column",
@@ -50,7 +54,7 @@ export default function TasksLayout() {
               fontFamily: "'Heebo', sans-serif",
               fontWeight: 800,
               fontSize: "20px",
-              color: "#684e39ff",
+              color: colors.primaryLight,
               letterSpacing: "-0.5px",
             }}
           >
@@ -58,7 +62,7 @@ export default function TasksLayout() {
           </Typography>
         </Box>
 
-        <Divider sx={{ borderColor: "#e8ddd4", mb: 2 }} />
+        <Divider sx={{ borderColor: colors.border, mb: 2 }} />
 
         <List sx={{ display: "flex", flexDirection: "column", gap: 0.5, p: 0 }}>
           {SIDEBAR_ITEMS.map((item) => {
@@ -75,12 +79,12 @@ export default function TasksLayout() {
                   py: 1,
                   px: 1.5,
                   position: "relative",
-                  bgcolor: active ? "#efe4d9" : "transparent",
-                  color: active ? "#7a5c44" : "#a08068",
+                  bgcolor: active ? colors.fieldBorder : "transparent",
+                  color: active ? colors.sidebarActive : colors.sidebarInactive,
                   transition: "all 0.18s ease",
                   "&:hover": {
-                    bgcolor: active ? "#efe4d9" : "#f0e8df",
-                    color: "#7a5c44",
+                    bgcolor: active ? colors.fieldBorder : colors.sidebarHover,
+                    color: colors.sidebarActive,
                   },
                   // Active indicator bar (on the left in RTL = right side)
                   "&::after": active
@@ -91,7 +95,7 @@ export default function TasksLayout() {
                         top: "20%",
                         height: "60%",
                         width: "3px",
-                        bgcolor: "#c8845a",
+                        bgcolor: colors.accent,
                         borderRadius: "3px 0 0 3px",
                       }
                     : {},
@@ -136,9 +140,9 @@ export default function TasksLayout() {
 
         <Box sx={{ display: "flex", flexDirection: "column", mt: "auto" }}>
 
-          <Divider sx={{ borderColor: "#e8ddd4", mb: 2 }} />
+          <Divider sx={{ borderColor: colors.border, mb: 2 }} />
 
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <UserAvatar />
             <Box>
               <Typography
@@ -146,7 +150,7 @@ export default function TasksLayout() {
                   fontFamily: "'Heebo', sans-serif",
                   fontWeight: 600,
                   fontSize: "13px",
-                  color: "#5c3d26",
+                  color: colors.primary,
                   lineHeight: 1.3,
                 }}
                 >
@@ -156,7 +160,7 @@ export default function TasksLayout() {
                 sx={{
                   fontFamily: "'Heebo', sans-serif",
                   fontSize: "11px",
-                  color: "#b09070",
+                  color: colors.sidebarSubLabel,
                 }}
                 >
                 Tasks manager
@@ -164,7 +168,7 @@ export default function TasksLayout() {
             </Box>
           </Box>
           
-          <Divider sx={{ borderColor: "#e8ddd4", mt: 2, mb: 3 }} />
+          <Divider sx={{ borderColor: colors.border, mt: 2, mb: 3 }} />
           
         <Button
           onClick={logout}
@@ -177,11 +181,11 @@ export default function TasksLayout() {
             fontWeight: "bold",
             fontSize: "15px",
             borderRadius: "10px",
-            bgcolor: "#f0cbc5ff",
-            color: "#836650ff",
+            bgcolor: colors.logoutBg,
+            color: colors.logoutText,
             "&:hover": {
-              bgcolor: "#efb59dff",
-              color: "#684e39",
+              bgcolor: colors.logoutHoverBg,
+              color: colors.logoutHoverText,
             },
           }}
         >
@@ -190,7 +194,7 @@ export default function TasksLayout() {
       </Box>
     </Drawer>
 
-      <Box>
+      <Box component="main" sx={{ flexGrow: 1, minWidth: 0, bgcolor: colors.completedRowBg, overflow: 'auto' }}>
           <Outlet />
       </Box>
     </Box>
