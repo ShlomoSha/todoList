@@ -6,7 +6,7 @@ import axiosInstance from "./axiosConfig";
 export const taskEndpoint = createEndpoint(ROUTES.TASKS)
 
 const tasksService = {
-    getAllTasks: () => axiosInstance.get(taskEndpoint(ROUTES.TASKS)),
+    getAllTasks: () => axiosInstance.get(taskEndpoint()),
 
     getUserStats: () => axiosInstance.get(taskEndpoint(ROUTES.STATS)),
 
@@ -14,7 +14,7 @@ const tasksService = {
 
     createTask: (taskData: CreateTaskDTO) => axiosInstance.post(taskEndpoint(), taskData),
 
-    toggleTaskCompletion: (taskId: string) => axiosInstance.patch(taskEndpoint(`/${ROUTES.TOGGLE}/${taskId}`)),
+    toggleTaskCompletion: (taskId: string) => axiosInstance.patch(taskEndpoint(`${ROUTES.TOGGLE}/${taskId}`)),
 
     updateTask: (taskId: string, updates: UpdateTaskDTO) => axiosInstance.patch(taskEndpoint(taskId), updates),
 
