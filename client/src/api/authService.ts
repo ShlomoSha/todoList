@@ -16,4 +16,6 @@ export const authService = {
     forgotPassword: (email: string) => axiosInstance.post(authEndpoint(ROUTES.FORGOT_PASSWORD), { email }),
 
     resetPassword: (data: ResetPasswordDTO) => axiosInstance.post(authEndpoint(ROUTES.RESET_PASSWORD), data),
+
+    getMe: () => axiosInstance.get(authEndpoint(ROUTES.ME)),
 }
