@@ -23,7 +23,7 @@ const appRoute: RouteConfig[] = [
                 children: [
                     {
                         path: ROUTES.LOGIN,
-                        component:Login
+                        component: Login
                     },
                     {
                         path: ROUTES.REGISTER,
@@ -43,6 +43,7 @@ const appRoute: RouteConfig[] = [
                 path: ROUTES.TASKS,
                 component: TasksLayout,
                 defaultRoute: ROUTES.ALL_TASKS,
+                protected: true,
                 children: [
                     {
                         path: ROUTES.ALL_TASKS,
