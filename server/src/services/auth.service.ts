@@ -63,8 +63,8 @@ export const userLogin = async (credentials: LoginDTO) => {
 }
 
 export const checkUserUniqueness = async (data: CheckDTO) => {
-    const { username, email } = data
-    const result = await validateUserUniqueness(username, email)
+    const { username, email, excludeUserId } = data
+    const result = await validateUserUniqueness(username, email, excludeUserId)
     return result
 }
 

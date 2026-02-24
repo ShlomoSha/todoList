@@ -10,6 +10,7 @@ export interface RegisterDTO extends LoginDTO {
 export interface CheckDTO {
     username?: string
     email?: string
+    excludeUserId?: string
 }
 
 export interface ResetPasswordDTO {
