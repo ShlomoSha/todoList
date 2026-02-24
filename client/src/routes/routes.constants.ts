@@ -13,4 +13,5 @@ export const ROUTES = {
     RESET_PASSWORD: 'reset-password',
     PROFILE: 'profile',
     ME: 'me',
+    USERS: 'users',
 } as const
