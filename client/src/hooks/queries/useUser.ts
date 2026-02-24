@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "../../api/authService";
+import { userService } from "../../api/userService";
 import type { IUser } from "../../types/auth.interface";
 import useLocalStorage from "../useLocalStorage";
 
@@ -21,5 +22,26 @@ export const useUser = () => {
 
         enabled: !!getToken(),
         retry: false,
+    });
+};
+
+export const useUpdateProfile = () => {
+    const queryClient = useQueryClient();
+    const { addUsernameLs } = useLocalStorage();
+
+    return useMutation({
+        mutationFn: (data: { username?: string, email?: string }) => userService.updateProfile(data),
+        onSuccess: (response) => {
+            const updatedUser = response.data.data.user;
+            queryClient.setQueryData(USER_QUERY_KEY, (oldData: any) => ({
+                ...oldData,
+                ...updatedUser,
+                id: updatedUser._id || updatedUser.id
+            }));
+            
+            if (updatedUser.username) {
+                addUsernameLs(updatedUser.username);
+            }
+        }
     });
 };
