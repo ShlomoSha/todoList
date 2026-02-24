@@ -5,6 +5,7 @@ interface UseFieldAvailabilityOptions {
     field: 'username' | 'email'
     value: string
     enabled: boolean 
+    excludeUserId?: string
     minLength?: number
     customValidation?: (value: string) => boolean
     debounceMs?: number
@@ -14,6 +15,7 @@ export const useFieldAvailability = ({
     field,
     value,
     enabled,
+    excludeUserId,
     minLength = 3,
     customValidation,
     debounceMs = 500
@@ -36,7 +38,7 @@ export const useFieldAvailability = ({
         
         const timeoutId = setTimeout(async () => {
             try {
-                const checkData = { [field]: value }
+                const checkData = { [field]: value, excludeUserId }
                 const response = await authService.checkAvailability(checkData)
                 setAvailable(response.data.available)
             } catch (err) {
