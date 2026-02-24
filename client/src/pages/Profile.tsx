@@ -1,15 +1,45 @@
-import { Box, Paper, Typography, CircularProgress, Divider, Button } from '@mui/material'
-import { useUser } from '../hooks/queries/useUser'
+import { Box, Paper, Typography, CircularProgress, Divider, Button, TextField, InputAdornment } from '@mui/material'
+import { useUser, useUpdateProfile } from '../hooks/queries/useUser'
 import { useTaskStats } from '../hooks/queries/useTasks'
 import UserAvatar from '../components/UserAvatar'
 import InfoField from '../components/InfoField'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
-import { TrendingUpRounded, CheckCircleOutlineRounded, ScheduleRounded, EmojiEventsRounded } from '@mui/icons-material'
+import { TrendingUpRounded, CheckCircleOutlineRounded, ScheduleRounded, EmojiEventsRounded, EditRounded, SaveRounded, CloseRounded, CheckCircleRounded, ErrorRounded } from '@mui/icons-material'
 import { colors } from '../config/theme'
+import { useState, useEffect } from 'react'
+import { useFieldAvailability } from '../hooks/useFieldAvailability'
+import { isValidEmail } from '../utils/validation/authForm.validation'
 
 export default function Profile() {
   const { data: user, isLoading: userLoading, isError: userError } = useUser()
   const { data: stats, isLoading: statsLoading } = useTaskStats()
+  const updateProfile = useUpdateProfile()
+
+  const [isEditing, setIsEditing] = useState(false)
+  const [editUsername, setEditUsername] = useState('')
+  const [editEmail, setEditEmail] = useState('')
+
+  useEffect(() => {
+    if (user) {
+      setEditUsername(user.username)
+      setEditEmail(user.email)
+    }
+  }, [user])
+
+  const { available: usernameAvailable, checking: checkingUsername } = useFieldAvailability({
+    field: 'username',
+    value: editUsername,
+    enabled: isEditing && editUsername !== user?.username,
+    excludeUserId: user?.id
+  })
+
+  const { available: emailAvailable, checking: checkingEmail } = useFieldAvailability({
+    field: 'email',
+    value: editEmail,
+    enabled: isEditing && editEmail !== user?.email,
+    excludeUserId: user?.id,
+    customValidation: isValidEmail
+  })
 
   if (userLoading || statsLoading) {
     return (
@@ -27,6 +57,36 @@ export default function Profile() {
     )
   }
 
+  const handleSave = async () => {
+    const data: { username?: string, email?: string } = {}
+    if (editUsername !== user.username) data.username = editUsername
+    if (editEmail !== user.email) data.email = editEmail
+
+    if (Object.keys(data).length === 0) {
+      setIsEditing(false)
+      return
+    }
+
+    try {
+      await updateProfile.mutateAsync(data)
+      setIsEditing(false)
+    } catch (err) {
+      console.error('Failed to update profile', err)
+    }
+  }
+
+  const handleCancel = () => {
+    setEditUsername(user.username)
+    setEditEmail(user.email)
+    setIsEditing(false)
+  }
+
+  const isFormValid = () => {
+    const usernameValid = editUsername === user.username || usernameAvailable === true
+    const emailValid = editEmail === user.email || (isValidEmail(editEmail) && emailAvailable === true)
+    return usernameValid && emailValid && !checkingUsername && !checkingEmail
+  }
+
   const completionRate = stats?.total
     ? Math.round((stats.completed / stats.total) * 100)
     : 0
@@ -35,6 +95,14 @@ export default function Profile() {
     { name: 'Completed', value: stats?.completed || 0, color: colors.green },
     { name: 'Pending', value: stats?.pending || 0, color: colors.orange },
   ]
+
+  const renderValidationIcon = (checking: boolean, available: boolean | null, current: string, original: string) => {
+    if (current === original) return null
+    if (checking) return <CircularProgress size={20} />
+    if (available === true) return <CheckCircleRounded color="success" sx={{ fontSize: 20 }} />
+    if (available === false) return <ErrorRounded color="error" sx={{ fontSize: 20 }} />
+    return null
+  }
 
   return (
     <Box sx={{ 
@@ -53,9 +121,6 @@ export default function Profile() {
           mb: 0.25
         }}>
           Profile
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Personalize your account and view your progress
         </Typography>
       </Box>
       
@@ -102,17 +167,96 @@ export default function Profile() {
 
         {/* Right Side: Account Info */}
         <Box sx={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography variant="subtitle1" sx={{ fontWeight: 700, color: colors.primary }}>
-            Account Information
-          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: colors.primary }}>
+              Account Information
+            </Typography>
+            {isEditing && (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button 
+                  size="small" 
+                  startIcon={<CloseRounded />} 
+                  onClick={handleCancel}
+                  sx={{ color: colors.secondary, textTransform: 'none', fontWeight: 600 }}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  variant="contained" 
+                  size="small" 
+                  startIcon={updateProfile.isPending ? <CircularProgress size={16} color="inherit" /> : <SaveRounded />} 
+                  disabled={!isFormValid() || updateProfile.isPending}
+                  onClick={handleSave}
+                  sx={{ 
+                    bgcolor: colors.accent, 
+                    '&:hover': { bgcolor: colors.accentDark },
+                    textTransform: 'none', 
+                    fontWeight: 700,
+                    borderRadius: '8px'
+                  }}
+                >
+                  {updateProfile.isPending ? 'Saving...' : 'Save'}
+                </Button>
+              </Box>
+            )}
+          </Box>
 
           <Box sx={{ 
             display: 'grid', 
             gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' }, 
             gap: 2 
           }}>
-            <InfoField label="Username" value={user.username} />
-            <InfoField label="Email Address" value={user.email} />
+            {isEditing ? (
+              <>
+                <Box>
+                  <Typography variant="caption" sx={{ mb: 0.75, fontWeight: 700, color: colors.secondary, textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '1px', display: 'block' }}>
+                    Username
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    value={editUsername}
+                    onChange={(e) => setEditUsername(e.target.value)}
+                    error={usernameAvailable === false}
+                    helperText={usernameAvailable === false ? 'Username already taken' : ''}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {renderValidationIcon(checkingUsername, usernameAvailable, editUsername, user.username)}
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: '12px', bgcolor: colors.fieldBg }
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <Typography variant="caption" sx={{ mb: 0.75, fontWeight: 700, color: colors.secondary, textTransform: 'uppercase', fontSize: '0.65rem', letterSpacing: '1px', display: 'block' }}>
+                    Email Address
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    error={emailAvailable === false || (editEmail !== user.email && !isValidEmail(editEmail))}
+                    helperText={emailAvailable === false ? 'Email already in use' : (editEmail !== user.email && !isValidEmail(editEmail) ? 'Invalid email format' : '')}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          {renderValidationIcon(checkingEmail, emailAvailable, editEmail, user.email)}
+                        </InputAdornment>
+                      ),
+                      sx: { borderRadius: '12px', bgcolor: colors.fieldBg }
+                    }}
+                  />
+                </Box>
+              </>
+            ) : (
+              <>
+                <InfoField label="Username" value={user.username} />
+                <InfoField label="Email Address" value={user.email} />
+              </>
+            )}
           </Box>
 
           <Divider sx={{ opacity: 0.6 }} />
@@ -127,24 +271,28 @@ export default function Profile() {
               </Typography>
             </Box>
             
-            <Button 
-              variant="contained" 
-              size="small"
-              sx={{ 
-                bgcolor: colors.accent, 
-                px: 3, 
-                py: 1, 
-                borderRadius: '12px',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                textTransform: 'none',
-                boxShadow: '0 6px 16px rgba(200, 132, 90, 0.2)',
-                '&:hover': { bgcolor: colors.accentDark, transform: 'translateY(-1px)' },
-                transition: 'all 0.2s ease'
-              }}
-            >
-              Edit Profile
-            </Button>
+            {!isEditing && (
+              <Button 
+                variant="contained" 
+                size="small"
+                startIcon={<EditRounded />}
+                onClick={() => setIsEditing(true)}
+                sx={{ 
+                  bgcolor: colors.accent, 
+                  px: 3, 
+                  py: 1, 
+                  borderRadius: '12px',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  textTransform: 'none',
+                  boxShadow: '0 6px 16px rgba(200, 132, 90, 0.2)',
+                  '&:hover': { bgcolor: colors.accentDark, transform: 'translateY(-1px)' },
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                Edit Profile
+              </Button>
+            )}
           </Box>
         </Box>
       </Paper>
