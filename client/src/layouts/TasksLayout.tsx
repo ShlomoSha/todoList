@@ -5,10 +5,9 @@ import SIDEBAR_ITEMS from "../config/sidebarItems";
 import BADGE_COLORS from "../config/badges";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { Logout } from "@mui/icons-material";
-import { ROUTES } from "../routes/routes.constants";
-import { taskEndpoint } from "../api/tasksService";
 import { colors } from "../config/theme";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../hooks/queries/useUser";
 
 const SIDEBAR_WIDTH = 248;
 
@@ -17,10 +16,10 @@ export default function TasksLayout() {
     const location = useLocation()
     const { deleteToken, getUsername, deleteUsernameLs } = useLocalStorage()
     const queryClient = useQueryClient()
+    const { data: user } = useUser()
 
     const isActive = (path: string) => {
-      if (path === taskEndpoint(ROUTES.TASKS)) return location.pathname === taskEndpoint(ROUTES.TASKS);
-      return location.pathname.startsWith(path);
+      return location.pathname === path;
     };
 
     const logout = async () => {
@@ -31,7 +30,12 @@ export default function TasksLayout() {
     }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
+    <Box sx={{ 
+      display: 'flex', 
+      height: '100vh', 
+      width: '100%', 
+      overflow: 'hidden',
+    }}>
       <Drawer variant="permanent" anchor="left" sx={{
         width: SIDEBAR_WIDTH,
         flexShrink: 0,
@@ -86,7 +90,6 @@ export default function TasksLayout() {
                     bgcolor: active ? colors.fieldBorder : colors.sidebarHover,
                     color: colors.sidebarActive,
                   },
-                  // Active indicator bar (on the left in RTL = right side)
                   "&::after": active
                     ? {
                         content: '""',
@@ -139,9 +142,7 @@ export default function TasksLayout() {
         </List>
 
         <Box sx={{ display: "flex", flexDirection: "column", mt: "auto" }}>
-
           <Divider sx={{ borderColor: colors.border, mb: 2 }} />
-
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <UserAvatar />
             <Box>
@@ -154,7 +155,7 @@ export default function TasksLayout() {
                   lineHeight: 1.3,
                 }}
                 >
-                {getUsername()}
+                {user?.username || getUsername()}
               </Typography>
               <Typography
                 sx={{
@@ -167,9 +168,7 @@ export default function TasksLayout() {
               </Typography>
             </Box>
           </Box>
-          
           <Divider sx={{ borderColor: colors.border, mt: 2, mb: 3 }} />
-          
         <Button
           onClick={logout}
           startIcon={<Logout />}
@@ -194,7 +193,11 @@ export default function TasksLayout() {
       </Box>
     </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, minWidth: 0, bgcolor: colors.completedRowBg, overflow: 'auto' }}>
+      <Box component="main" sx={{ 
+        flexGrow: 1, 
+        height: '100vh', 
+        overflow: 'hidden', // Page-level scroll is handled inside children
+      }}>
           <Outlet />
       </Box>
     </Box>
